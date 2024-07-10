@@ -44,7 +44,7 @@ ___
 ---
 >dir directory
 * Allows you to list the files in a directory on the victim's machine.
-    ---
+---
 >exec command timeout(sec)
 * Allows you to execute any command in the console of the victim's machine. The timeout parameter specifies the maximum execution time, after which the command returns the partial output.
 ---
