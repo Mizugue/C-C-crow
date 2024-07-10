@@ -90,7 +90,7 @@ Who is LaZagne? Check here -> https://github.com/AlessandroZ/LaZagne
 ---
 >grab_cam
 * Captures an image from the webcam of the victim's machine.
-  ---
-  ---
+---
+---
 >[Disclaimer]
 >This project is intended for educational purposes only. The backdoor implemented here is designed to demonstrate concepts related to cybersecurity and network programming. Do not use this software for malicious purposes. Unauthorized access to computer systems and data is illegal and unethical.        
