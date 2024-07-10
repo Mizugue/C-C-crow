@@ -71,7 +71,7 @@ ___
 ---
 >lazagne timeout(sec)
 * Downloads and executes LaZagne. If the execution exceeds the specified timeout, it returns the partial output.
-Who is LaZagne? Check here -> LaZagne GitHub
+Who is LaZagne? Check here -> https://github.com/AlessandroZ/LaZagne
 ---
 >crypter & decrypter
 * Uses the Fernet library for symmetric encryption and decryption of the current directory. It uses AES-128 for encryption and decryption, sends the key to the server, and then self-deletes on the client.
