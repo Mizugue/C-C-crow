@@ -2,7 +2,6 @@ import socket
 import struct
 import cv2
 import numpy as np
-import shutil
 import utils
 
 class Server():
@@ -143,11 +142,12 @@ class Server():
             server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             try:
                 server_socket.bind((self.host, self.port))
+                text = utils.show_banner(1)
                 text = utils.center(f"Listening on {self.host}:{self.port}...")
                 utils.yellow(text)
                 server_socket.listen(5)
                 client_socket, client_addr = server_socket.accept()
-                utils.show_banner()
+                utils.show_banner(0)
                 text = utils.center(f"[+] Received From {client_addr}")
                 utils.green(text)
                 while True:

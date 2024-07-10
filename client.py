@@ -582,7 +582,6 @@ def get_help_message():
             - disable_defender: Disable the windows defender(Need to permission).
             - grab_cam: Capture a screenshot from webcam victim's machine.
             - help: Display this help message.
-
             """
         return help_message
     except Exception as e:
